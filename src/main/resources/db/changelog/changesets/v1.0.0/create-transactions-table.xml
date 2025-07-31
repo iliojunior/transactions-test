@@ -1,0 +1,52 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-transactions-table-v1.0.0" author="ilio.junior">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TRANSACTIONS"/>
+            </not>
+        </preConditions>
+
+        <comment>Create 'TRANSACTIONS' table</comment>
+
+        <createTable tableName="TRANSACTIONS">
+            <column name="ID" type="INT" remarks="Transaction ID" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ACCOUNT_ID" type="INT" remarks="Account ID to FK">
+                <constraints nullable="false"/>
+            </column>
+            <column name="OPERATION_TYPE_ID" type="INT" remarks="Operation type ID to FK">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="DECIMAL(19,4)" remarks="Transaction amount">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EVENT_DATE" type="DATETIME" remarks="Date and time when event occurs">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="TRANSACTIONS"
+                                 baseColumnNames="ACCOUNT_ID"
+                                 constraintName="transactions-accounts-fk"
+                                 referencedTableName="ACCOUNTS"
+                                 referencedColumnNames="ID"/>
+
+        <addForeignKeyConstraint baseTableName="TRANSACTIONS"
+                                 baseColumnNames="OPERATION_TYPE_ID"
+                                 constraintName="transactions-operation-types-fk"
+                                 referencedTableName="OPERATION_TYPES"
+                                 referencedColumnNames="ID"/>
+
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="TRANSACTIONS" constraintName="transactions-accounts-fk"/>
+            <dropForeignKeyConstraint baseTableName="TRANSACTIONS" constraintName="transactions-operation-types-fk"/>
+            <dropTable tableName="TRANSACTIONS"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

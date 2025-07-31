@@ -1,0 +1,29 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-accounts-table-v1.0.0" author="ilio.junior">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ACCOUNTS"/>
+            </not>
+        </preConditions>
+
+        <comment>Create 'ACCOUNTS' table with ID and DOCUMENT_NUMBER</comment>
+
+        <createTable tableName="ACCOUNTS">
+            <column name="ID" type="INT" remarks="Account ID" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="DOCUMENT_NUMBER" type="VARCHAR(255)" remarks="Account document number">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="ACCOUNTS"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,71 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-operation-types-table-v1.0.0" author="ilio.junior">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="OPERATION_TYPES"/>
+            </not>
+        </preConditions>
+
+        <comment>Create 'OPERATION_TYPES' table</comment>
+
+        <createTable tableName="OPERATION_TYPES">
+            <!-- I Prefer to use UUID instead -->
+            <column name="ID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(100)" remarks="Indicate if this type is CREDIT or DEBIT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="OPERATION_TYPES"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="seed-operation-types-table.xml" author="ilio.junior">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM OPERATION_TYPES WHERE ID in (1,2,3,4)</sqlCheck>
+        </preConditions>
+
+        <comment>Insert initial operation types</comment>
+        
+        <insert tableName="OPERATION_TYPES">
+            <column name="ID">1</column>
+            <column name="DESCRIPTION">Normal Purchase</column>
+            <column name="TYPE">DEBIT</column>
+        </insert>
+
+        <insert tableName="OPERATION_TYPES">
+            <column name="ID">2</column>
+            <column name="DESCRIPTION">Purchase with installments</column>
+            <column name="TYPE">DEBIT</column>
+        </insert>
+
+        <insert tableName="OPERATION_TYPES">
+            <column name="ID">3</column>
+            <column name="DESCRIPTION">Withdrawal</column>
+            <column name="TYPE">DEBIT</column>
+        </insert>
+
+        <insert tableName="OPERATION_TYPES">
+            <column name="ID">4</column>
+            <column name="DESCRIPTION">Credit Voucher</column>
+            <column name="TYPE">CREDIT</column>
+        </insert>
+
+        <rollback>
+            <delete tableName="OPERATION_TYPES">
+                <where>ID in (1,2,3,4)</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

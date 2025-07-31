@@ -1,0 +1,7 @@
+# Used for development environment
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/transactions?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: transaction-dev
+    password: transaction-dev
+    driver-class-name: com.mysql.cj.jdbc.Driver
