@@ -36,8 +36,13 @@ This approach ensures that each layer has a distinct responsibility, making the 
 2. **Build and run the application:**
    ```bash  
    # Using docker with docker-compose
+   # Does not work on Windows
    chmod +X run.sh
    ./run.sh
+   ```
+   on Windows use:
+   ```bash
+   docker compose -f others/docker/docker-compose.yaml up -d
    ```
 
 3. **Access the application:**
